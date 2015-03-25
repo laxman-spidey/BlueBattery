@@ -1,20 +1,73 @@
 package blueset.triangles.com.blueset;
 
+import android.bluetooth.BluetoothDevice;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import blueset.triangles.com.blueset.util.LogUtil;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    //ArrayList<>
+    private ListView listview;
+    public static final String PREFS_NAME = "BlueSetPreferences";
+    public static final String SELECTED_DEVICE = "seletedDevice";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LogUtil.print("djkfhaskdf");
+        initiate();
+        afterActivityCreation();
     }
 
+    BluetoothController bluetoothController;
+    DeviceListAdapter deviceList;
+    public void initiate()
+    {
+        bluetoothController = new BluetoothController();
+        //bluetoothController.setBluetoothUp();
+        bluetoothController.switchBluetooth(true);
+        //deviceList = bluetoothController.discoverDevices();
 
+    }
+    private void afterActivityCreation()
+    {
+        listview = (ListView) findViewById(R.id.deviceList);
+        ArrayList<Integer> imageIdList = new ArrayList<Integer>();
+
+        //getCategoryAttributesFromBuilder(imageIdList);
+        //Log.i("tag", "after getting attributes");
+        //DeviceListAdapter adapter = new DeviceListAdapter(getApplicationContext(),R.layout.row_layout,deviceList);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.id.list_item);
+        deviceList = new DeviceListAdapter(getApplicationContext(),R.layout.row_layout);
+        listview.setAdapter(deviceList);
+        bluetoothController.startDiscovering();
+        bluetoothController.discoverDevices(deviceList);
+        //listview.setOnItemClickListener(this);
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        BluetoothDevice selectedDevice = deviceList.getItem(position);
+        LogUtil.print("configured item - " +selectedDevice.getName());
+        bluetoothController.cancelDiscovery();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(SELECTED_DEVICE, selectedDevice.getAddress());
+        editor.commit();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -36,4 +89,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

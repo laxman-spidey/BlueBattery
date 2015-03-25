@@ -2,9 +2,16 @@ package blueset.triangles.com.blueset;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.provider.MediaStore;
 import android.telephony.PhoneStateListener;
+import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import blueset.triangles.com.blueset.util.LogUtil;
@@ -26,6 +33,7 @@ public class BluetoothController {
         if (mBluetoothAdapter == null) {
             // Device does not support Bluetooth
         }
+
     }
 
     public static boolean switchBluetooth(boolean enable) {
@@ -43,7 +51,11 @@ public class BluetoothController {
     }
 
     public void connectToHeadset() {
+        //AudioManager audioManager = AppContext.getAppContext().getSystemService(Context.AUDIO_SERVICE);
+        //audioManager.setBluetoothScoOn();
 
+
+        LogUtil.print("connecting to headset");
     }
 
     Set<BluetoothDevice> pairedDevices;
@@ -58,6 +70,90 @@ public class BluetoothController {
 
             }
         }
+    }
+    private  BroadcastReceiver mReceiver;
+    DeviceListAdapter deviceList;
+    public ArrayAdapter<BluetoothDevice> discoverDevices( DeviceListAdapter deviceListAdapter)
+    {
+        this.deviceList = deviceListAdapter;
+         mReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                // When discovery finds a device
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // Get the BluetoothDevice object from the Intent
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    deviceList.add(device);
+                    // Add the name and address to an array adapter to show in a ListView
+                    //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+            }
+        };
+        // Register the BroadcastReceiver
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        AppContext.getAppContext().registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+
+
+        return deviceList;
+    }
+
+    ArrayAdapter<String> mArrayAdapter;
+    public void discoverDevicesStrings(ArrayAdapter<String> stringArrayAdapter)
+    {
+        this.mArrayAdapter = stringArrayAdapter;
+        mReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                // When discovery finds a device
+                LogUtil.print("discovering devices");
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // Get the BluetoothDevice object from the Intent
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    //deviceList.add(device);
+                    // Add the name and address to an array adapter to show in a ListView
+                    LogUtil.print(device.getName() + "\n" + device.getAddress());
+                    mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+            }
+        };
+        // Register the BroadcastReceiver
+        LogUtil.print("discover called");
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        AppContext.getAppContext().registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+
+        //return deviceList;
+    }
+    public void startDiscovering()
+    {
+        mBluetoothAdapter.startDiscovery();
+    }
+    public void cancelDiscovery()
+    {
+        mBluetoothAdapter.cancelDiscovery();
+    }
+
+    public void unRegisterReceiver()
+    {
+        AppContext.getAppContext().unregisterReceiver(mReceiver);
+    }
+
+    /*
+    public ArrayAdapter<String> getDeviceNames()
+    {
+        ArrayAdapter<String> names = new ArrayAdapter<String>();
+        int listCount = deviceList.getCount();
+        for(int i=0; i <= listCount; i++)
+        {
+            BluetoothDevice device = deviceList.getItem(i);
+            names.add(device.getName() + "\n" + device.getAddress());
+        }
+        return names;
+    }
+    */
+
+    public void pairIfNotPaired(BluetoothDevice device)
+    {
+        //mBluetoothAdapter.
     }
 
 }
