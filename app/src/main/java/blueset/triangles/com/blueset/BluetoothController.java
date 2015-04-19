@@ -50,6 +50,12 @@ public class BluetoothController {
         return true;
     }
 
+    public boolean isEnabled()
+    {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return bluetoothAdapter.isEnabled();
+    }
+
     public void connectToHeadset() {
         //AudioManager audioManager = AppContext.getAppContext().getSystemService(Context.AUDIO_SERVICE);
         //audioManager.setBluetoothScoOn();

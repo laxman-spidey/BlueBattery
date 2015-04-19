@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BlueSet.iml" filepath="$PROJECT_DIR$/BlueSet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BlueBattery.iml" filepath="$PROJECT_DIR$/BlueBattery.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

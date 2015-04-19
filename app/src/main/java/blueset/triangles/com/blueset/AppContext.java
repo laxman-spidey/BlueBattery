@@ -25,7 +25,7 @@ public class AppContext extends Application {
 
     public void registerListener()
     {
-        CallStateListener callStateListener = new CallStateListener();
+        CallStateListener callStateListener = CallStateListener.getCallStateListenerObject();
         callStateListener.initiate();
     }
 }
