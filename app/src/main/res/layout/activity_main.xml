@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/bluetoothButton"
 
-        android:background="@drawable/bluetoothxxl" />
+        android:background="@drawable/bluetooth" />
 
     <Button
         android:layout_width="match_parent"

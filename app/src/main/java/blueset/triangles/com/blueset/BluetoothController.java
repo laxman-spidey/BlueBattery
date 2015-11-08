@@ -44,6 +44,7 @@ public class BluetoothController {
             return bluetoothAdapter.enable();
         }
         else if(!enable && isEnabled) {
+            LogUtil.print("disabling bluetooth");
             return bluetoothAdapter.disable();
         }
         // No need to change bluetooth state
@@ -161,5 +162,4 @@ public class BluetoothController {
     {
         //mBluetoothAdapter.
     }
-
 }

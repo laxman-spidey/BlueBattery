@@ -14,9 +14,9 @@ public class AppContext extends Application {
 
     public void onCreate(){
         super.onCreate();
+        LogUtil.print("app started");
         AppContext.context = getApplicationContext();
         registerListener();
-        LogUtil.print("app started");
     }
 
     public static Context getAppContext() {
@@ -25,8 +25,10 @@ public class AppContext extends Application {
 
     public void registerListener()
     {
-        CallStateListener callStateListener = CallStateListener.getCallStateListenerObject();
-        callStateListener.initiate();
+
+        LogUtil.print("registering listener");
+        //CallStateListener callStateListener = CallStateListener.getCallStateListenerObject();
+        //callStateListener.initiate();
     }
 }
 

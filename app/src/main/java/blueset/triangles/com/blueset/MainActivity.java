@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity  implements View.OnClickList
     {
         bluetoothController = new BluetoothController();
         //bluetoothController.setBluetoothUp();
-        bluetoothController.switchBluetooth(true);
+        //bluetoothController.switchBluetooth(true);
         //deviceList = bluetoothController.discoverDevices();
 
     }

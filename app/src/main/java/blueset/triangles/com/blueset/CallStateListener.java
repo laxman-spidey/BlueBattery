@@ -1,8 +1,13 @@
 package blueset.triangles.com.blueset;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import java.lang.reflect.Method;
 
 import blueset.triangles.com.blueset.util.LogUtil;
 import blueset.triangles.com.blueset.util.SettingsUtil;
@@ -21,18 +26,20 @@ public class CallStateListener extends PhoneStateListener {
         switch (state) {
             case TelephonyManager.CALL_STATE_RINGING: {
                 LogUtil.print("call recieved from "+incomingNumber);
-
                 onPhoneRinging();
                 break;
             }
             case TelephonyManager.CALL_STATE_OFFHOOK:
             {
-                LogUtil.print("call offhook"+incomingNumber);
+                LogUtil.print("call offhook" + incomingNumber);
+
+                break;
             }
             case TelephonyManager.CALL_STATE_IDLE:
             {
                 LogUtil.print("call Idle"+incomingNumber);
                 onPhoneDisconnected();
+                incomingNumber = "0";
                 break;
             }
         }
@@ -62,8 +69,9 @@ public class CallStateListener extends PhoneStateListener {
     }
 
     BluetoothController bluetoothController;
-    public void onPhoneRinging()
-    {
+
+    public void onPhoneRinging()  {
+
         bluetoothController = new BluetoothController();
         isBluetoothAlreadyEnabled = bluetoothController.isEnabled();
         bluetoothController.switchBluetooth(true);
