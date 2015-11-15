@@ -23,6 +23,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- Default Android player. Play/pause/resume -->
+                <action android:name="com.android.music.playstatechanged" />
+                <!-- <action android:name="com.android.music.musicservicecommand" />-->
+
             </intent-filter>
         </receiver>
         <receiver
