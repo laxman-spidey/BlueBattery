@@ -24,24 +24,28 @@ public class CallStateHandlerService extends IntentService {
     }
     @Override
     protected void onHandleIntent(Intent intent) {
-
-        String broacastCallState = intent.getStringExtra("ACTION_CALL_STATE");
-        if(broacastCallState.equals(ACTION_OUTGOING_CALL))
+        LogUtil.print("service started");
+        String broadcastCallState = intent.getStringExtra("ACTION_CALL_STATE");
+        if(broadcastCallState.equals(ACTION_OUTGOING_CALL))
         {
+            LogUtil.print("outgoing call");
             sendBluetoothAction(true);
         }
-        else if(broacastCallState.equals(ACTION_INCOMING_CALL))
+        else if(broadcastCallState.equals(ACTION_INCOMING_CALL))
         {
             String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             if(callState.equals(TelephonyManager.EXTRA_STATE_RINGING))
             {
+                LogUtil.print("Incoming call");
                 sendBluetoothAction(true);
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_IDLE))
             {
+                LogUtil.print("call disconnected");
                 sendBluetoothAction(false);
             }
             else {
+                LogUtil.print("others");
                 return;
             }
         }
@@ -49,12 +53,7 @@ public class CallStateHandlerService extends IntentService {
         if(intent.hasExtra("MUSIC_STATE")) {
             //handleMusicEvents(intent);
         }
-        LogUtil.print("handling Intent");
-        Toast.makeText(getApplicationContext(),"handling intent ",Toast.LENGTH_SHORT);
-        BluetoothController bluetoothController;
-        bluetoothController = new BluetoothController();
-        boolean state = intent.getBooleanExtra("switchBluetoothToState", false);
-        bluetoothController.switchBluetooth(state);
+        //LogUtil.print("handling Intent");
 
     }
     /*
@@ -90,6 +89,7 @@ public class CallStateHandlerService extends IntentService {
     }
     private void sendBluetoothAction(boolean bluetoothState)
     {
+        LogUtil.print("turning bluetooth " + bluetoothState);
         BluetoothController bluetoothController = new BluetoothController();
         bluetoothController.switchBluetooth(bluetoothState);
     }

@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
 
-
     <application
         android:name=".AppContext"
         android:allowBackup="true"
@@ -17,52 +16,46 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver
-            android:name="blueset.triangles.com.blueset.CallStateReciever"
+            android:name=".CallStateReciever"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <!-- Default Android player. Play/pause/resume -->
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="com.android.music.musicservicecommand" />
                 <action android:name="com.android.music.playstatechanged" />
-                <!-- <action android:name="com.android.music.musicservicecommand" />-->
-
             </intent-filter>
         </receiver>
         <receiver
-            android:name="blueset.triangles.com.blueset.OutgoingCallStateReciever"
+            android:name=".MediaStateReceiver"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="com.android.music.musicservicecommand" />
             </intent-filter>
         </receiver>
-        <service android:name=".CallStateHandlerService">
 
+        <service
+            android:name=".CallStateHandlerService"
+            android:exported="false" >
         </service>
+        <service
+            android:name=".MusicStateChangeService"
+            android:exported="false" >
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
-
         </activity>
 
     </application>

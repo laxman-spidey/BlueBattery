@@ -16,18 +16,29 @@ public class CallStateReciever extends BroadcastReceiver {
 
     public static String ACTION_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
     public static String ACTION_INCOMING_CALL = "android.intent.action.PHONE_STATE";
+    public static String ACTION_MUSIC_STATE_CHANGE = "com.android.music.playstatechanged";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String broadcastAction = intent.getAction();
-        LogUtil.print("broadcast event recieved " + intent.getAction());
-        Intent blueIntent = new Intent(context, CallStateHandlerService.class);
-        blueIntent.putExtra("ACTION_CALL_STATE", broadcastAction);
-        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-        blueIntent.putExtra(TelephonyManager.EXTRA_STATE, state);
-        context.startService(blueIntent);
-
+        LogUtil.print("broadcast eventbbb recieved " + intent.getAction());
+        if(broadcastAction.equals(ACTION_MUSIC_STATE_CHANGE))
+        {
+            if(intent.hasExtra("playing")) {
+                Intent mediaIntent = new Intent(context, MusicStateChangeService.class);
+                mediaIntent.putExtra("MUSIC_STATE", true);
+                mediaIntent.putExtra("playing",intent.getBooleanExtra("playing",false));
+                context.startService(mediaIntent);
+            }
+        }
+        else {
+            Intent blueIntent = new Intent(context, CallStateHandlerService.class);
+            blueIntent.putExtra("ACTION_CALL_STATE", broadcastAction);
+            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+            blueIntent.putExtra(TelephonyManager.EXTRA_STATE, state);
+            context.startService(blueIntent);
+        }
         /*
         if(broadcastAction.equals(ACTION_OUTGOING_CALL))
         {
@@ -68,16 +79,5 @@ public class CallStateReciever extends BroadcastReceiver {
         msg += ". Incoming number is " + incomingNumber;
         LogUtil.print(msg);
         */
-    }
-    private boolean getMusicState(Context context)
-    {
-        boolean musicState = false;
-        SharedPreferences sharedPref2 = context.getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-        if(sharedPref2.contains("MUSIC_STATE")) {
-            LogUtil.print("Getting Music state");
-            musicState = sharedPref2.getBoolean("MUSIC_STATE", false);
-        }
-        LogUtil.print("music_state " + musicState);
-        return musicState;
     }
 }
