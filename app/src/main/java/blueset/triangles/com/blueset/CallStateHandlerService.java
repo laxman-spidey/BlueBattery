@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
+
+import blueset.triangles.com.blueset.util.ConstantUtil;
 import blueset.triangles.com.blueset.util.LogUtil;
 
 /**
@@ -13,8 +15,8 @@ import blueset.triangles.com.blueset.util.LogUtil;
  */
 public class CallStateHandlerService extends IntentService {
 
-    public static String ACTION_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
-    public static String ACTION_INCOMING_CALL = "android.intent.action.PHONE_STATE";
+    public static String ACTION_OUTGOING_CALL = ConstantUtil.ACTION_OUTGOING_CALL;
+    public static String ACTION_INCOMING_CALL = ConstantUtil.ACTION_INCOMING_CALL;
 
     public CallStateHandlerService() {
         super("CALL_STATE_HANDLER");
@@ -29,6 +31,7 @@ public class CallStateHandlerService extends IntentService {
         if(broadcastCallState.equals(ACTION_OUTGOING_CALL))
         {
             LogUtil.print("outgoing call");
+            setCallState(ConstantUtil.CALL_STATE_CONNECTED);
             sendBluetoothAction(true);
         }
         else if(broadcastCallState.equals(ACTION_INCOMING_CALL))
@@ -36,56 +39,31 @@ public class CallStateHandlerService extends IntentService {
             String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             if(callState.equals(TelephonyManager.EXTRA_STATE_RINGING))
             {
+                setCallState(ConstantUtil.CALL_STATE_CONNECTED);
                 LogUtil.print("Incoming call");
                 sendBluetoothAction(true);
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_IDLE))
             {
+                setCallState(ConstantUtil.CALL_STATE_DISCONNECTED);
                 LogUtil.print("call disconnected");
-                sendBluetoothAction(false);
+                if(getMusicStateFromSharedPref().equals(ConstantUtil.MUSIC_STATE_PLAY)) {
+                    sendBluetoothAction(false);
+                }
             }
             else {
                 LogUtil.print("others");
                 return;
             }
         }
-
-        if(intent.hasExtra("MUSIC_STATE")) {
-            //handleMusicEvents(intent);
-        }
-        //LogUtil.print("handling Intent");
-
     }
-    /*
-    protected void handleMusicEvents(Intent intent)
-    {
 
-            boolean musicState = intent.getBooleanExtra("MUSIC_STATE", false);
-            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            if(intent.getBooleanExtra("playing", false))
-            {
-                editor.putBoolean("MUSIC_STATE", true);
-            } else {
-                LogUtil.print("not playing");
-                editor.putBoolean("MUSIC_STATE", false);
-            }
-            editor.commit();
-            SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-            LogUtil.print("music_state " + sharedPref1.getBoolean("MUSIC_STATE", false));
-
-    }
-    */
-    private boolean getMusicState(Context context)
+    private void setCallState(String callState)
     {
-        boolean musicState = false;
-        SharedPreferences sharedPref2 = context.getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-        if(sharedPref2.contains("MUSIC_STATE")) {
-            LogUtil.print("Getting Music state");
-            musicState = sharedPref2.getBoolean("MUSIC_STATE", false);
-        }
-        LogUtil.print("music_state " + musicState);
-        return musicState;
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(ConstantUtil.CALL_STATE_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(ConstantUtil.CALL_STATE_STRING,callState);
+        editor.commit();
     }
     private void sendBluetoothAction(boolean bluetoothState)
     {
@@ -93,10 +71,10 @@ public class CallStateHandlerService extends IntentService {
         BluetoothController bluetoothController = new BluetoothController();
         bluetoothController.switchBluetooth(bluetoothState);
     }
-    private boolean getMusicStateFromSharedPref()
+    private String getMusicStateFromSharedPref()
     {
-        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-        boolean state = sharedPref1.getBoolean("MUSIC_STATE", false);
+        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.MUSIC_STATE_PREF, Context.MODE_PRIVATE);
+        String state = sharedPref1.getString(ConstantUtil.MUSIC_STATE, ConstantUtil.MUSIC_STATE_NONE);
         LogUtil.print("music_state " + state);
         return state;
 

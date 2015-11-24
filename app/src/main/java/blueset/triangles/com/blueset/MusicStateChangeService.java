@@ -9,107 +9,82 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 
+import java.lang.reflect.Constructor;
+
+import blueset.triangles.com.blueset.util.ConstantUtil;
 import blueset.triangles.com.blueset.util.LogUtil;
 
 public class MusicStateChangeService extends IntentService {
 
     public MusicStateChangeService() {
-        super("MUSIC_STATE");
+        super(ConstantUtil.MUSIC_STATE);
     }
-    public boolean inSameService = false;
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        LogUtil.print("service started");
         if (intent != null) {
-            final String action = intent.getAction();
-            if(intent.hasExtra("MUSIC_STATE")) {
-                boolean isPlaying = intent.getBooleanExtra("playing", false);
-                boolean previousState = getMusicStateFromSharedPref();
-                if(previousState == false)
-                {
+            if (intent.hasExtra(ConstantUtil.MUSIC_STATE)) {
+                String previousState = getMusicStateFromSharedPref();
+                LogUtil.print("previous state " + previousState);
+                if (previousState.equals(ConstantUtil.MUSIC_STATE_STOP)) {
                     handleMusicIntent(intent);
-                }
-                else {
-                    Handler mHandle = new Handler();
-                    LogUtil.print("waiting for 1 seconds before turning off bluetooth");
-                    final boolean b = mHandle.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            LogUtil.print("After 1 second");
-                            if (isMusicTurnedOffBySystem == false) {
-                                handleMusicIntent(intent);
-                            } else {
-                                LogUtil.print("music turned off by system because of a call,  ignoring the state");
-                            }
+                } else {
+                    //total 10 sec
+                    for (int i = 0; i <= 01; i++) {
+
+                        try {
+                            Thread.sleep(1000); //every 1 sec
+                            LogUtil.print(i + "....");
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
-                    }, 1000);
+                    }
+                    if (getCallStateFromSharedPref().equals(ConstantUtil.CALL_STATE_CONNECTED))
+                    {
+                        setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
+                    }
+                    else
+                    {
+                        handleMusicIntent(intent);
+                    }
                 }
             }
         }
-
     }
-    protected void handleMusicIntent(Intent intent)
-    {
-        LogUtil.print("After 1 second");
-        boolean musicState = intent.getBooleanExtra("MUSIC_STATE", false);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
+
+    protected void setMusicState(String state) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(ConstantUtil.MUSIC_STATE_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        LogUtil.print("music = " + intent.getBooleanExtra("playing", true));
-        if(intent.getBooleanExtra("playing", false))
-        {
-            editor.putBoolean("MUSIC_STATE", true);
+        editor.putString(ConstantUtil.MUSIC_STATE, state);
+        editor.commit();
+    }
+
+    protected void handleMusicIntent(Intent intent) {
+        LogUtil.print("handling intent");
+        if (intent.getBooleanExtra(ConstantUtil.INTENT_ACTION_PLAYING, false)) {
+            setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
         } else {
-            LogUtil.print("not playing");
-            editor.putBoolean("MUSIC_STATE", false);
+            setMusicState(ConstantUtil.MUSIC_STATE_STOP);
         }
 
-        editor.commit();
 
     }
 
-    private boolean getMusicStateFromSharedPref()
-    {
-        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences("MUSIC_STATE_PREF", Context.MODE_PRIVATE);
-        boolean state = sharedPref1.getBoolean("MUSIC_STATE", false);
+    private String getMusicStateFromSharedPref() {
+        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.MUSIC_STATE_PREF, Context.MODE_PRIVATE);
+        String state = sharedPref1.getString(ConstantUtil.MUSIC_STATE, ConstantUtil.MUSIC_STATE_NONE);
         LogUtil.print("music_state " + state);
         return state;
 
     }
-    private BroadcastReceiver callStateReciever;
-    private boolean isMusicTurnedOffBySystem = false;
+    private String getCallStateFromSharedPref() {
+        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.CALL_STATE_PREF, Context.MODE_PRIVATE);
+        String state = sharedPref1.getString(ConstantUtil.CALL_STATE_STRING, ConstantUtil.CALL_STATE_NONE);
+        LogUtil.print("Call_state" + state);
+        return state;
 
-    private static String ACTION_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
-    private static String ACTION_INCOMING_CALL = "android.intent.action.PHONE_STATE";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        LogUtil.print("on create()");
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_INCOMING_CALL);
-        intentFilter.addAction(ACTION_OUTGOING_CALL);
-        callStateReciever = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-                if (callState.equals(TelephonyManager.EXTRA_STATE_IDLE) || callState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-                    LogUtil.print("isMusicTurnedOffBySystem = false");
-                    return;
-                }
-                else
-                {
-                    LogUtil.print("isMusicTurnedOffBySystem = true");
-                    isMusicTurnedOffBySystem = true;
-                }
-            }
-        };
-        this.registerReceiver(callStateReciever,intentFilter);
-    }
-
-    @Override
-    public void onDestroy() {
-        LogUtil.print("on destroy()");
-        this.unregisterReceiver(callStateReciever);
-        super.onDestroy();
     }
 }
+
