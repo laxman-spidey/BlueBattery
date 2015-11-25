@@ -47,7 +47,7 @@ public class CallStateHandlerService extends IntentService {
             {
                 setCallState(ConstantUtil.CALL_STATE_DISCONNECTED);
                 LogUtil.print("call disconnected");
-                if(getMusicStateFromSharedPref().equals(ConstantUtil.MUSIC_STATE_PLAY)) {
+                if(getMusicStateFromSharedPref().equals(ConstantUtil.MUSIC_STATE_STOP)) {
                     sendBluetoothAction(false);
                 }
             }
