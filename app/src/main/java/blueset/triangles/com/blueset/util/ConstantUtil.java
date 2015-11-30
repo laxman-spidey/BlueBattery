@@ -5,6 +5,8 @@ package blueset.triangles.com.blueset.util;
  */
 public class ConstantUtil {
 
+    //Shared Pref main Constant
+    public static String BLUE_SHARED_PREF = "BLUE_SHARED_PREF";
     //Music state constants
     public static String ACTION_MUSIC_STATE_CHANGE = "com.android.music.playstatechanged";
     public static final String INTENT_ACTION_PLAYING = "playing";
@@ -27,5 +29,9 @@ public class ConstantUtil {
     public static final String CALL_STATE_DISCONNECTED = "CALL_STATE_DISCONNECTED";
     public static final String CALL_STATE_NONE = "CALL_STATE_NONE";
 
+    //Widget Constants
+    public static final String WIDGET_UPDATE_ACTION = "com.triangles.blueset.WIDGET_UPDATE_ACTION";
 
+    //App Service Constants
+    public static final String APP_SERVICE_STATE = "APP_SERVICE_STATE";
 }

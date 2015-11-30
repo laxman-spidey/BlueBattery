@@ -82,13 +82,6 @@ public class MusicStateChangeService extends IntentService {
 
     }
 
-    private String getMusicStateFromSharedPref() {
-        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.MUSIC_STATE_PREF, Context.MODE_PRIVATE);
-        String state = sharedPref1.getString(ConstantUtil.MUSIC_STATE, ConstantUtil.MUSIC_STATE_NONE);
-        LogUtil.print("music_state " + state);
-        return state;
-
-    }
     private String getCallStateFromSharedPref() {
         SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.CALL_STATE_PREF, Context.MODE_PRIVATE);
         String state = sharedPref1.getString(ConstantUtil.CALL_STATE_STRING, ConstantUtil.CALL_STATE_NONE);

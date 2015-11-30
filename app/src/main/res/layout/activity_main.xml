@@ -13,11 +13,11 @@
         android:gravity="center" />
 
     <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="512px"
+        android:layout_height="512px"
+        android:layout_gravity="center"
         android:id="@+id/bluetoothButton"
-
-        android:background="@drawable/bluetooth" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:layout_width="match_parent"

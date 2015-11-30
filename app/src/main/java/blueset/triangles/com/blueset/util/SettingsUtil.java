@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import blueset.triangles.com.blueset.AppContext;
-import blueset.triangles.com.blueset.CallStateListener;
+
 
 /**
  * Created by laxman on 11/4/15.
@@ -30,7 +29,7 @@ public class SettingsUtil implements SharedPreferences.OnSharedPreferenceChangeL
     public SettingsUtil()
     {
 
-        this.context = AppContext.getAppContext();
+
         //settings = context.getSharedPreferences(PREFS_NAME, 0);
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
@@ -65,11 +64,11 @@ public class SettingsUtil implements SharedPreferences.OnSharedPreferenceChangeL
         {
             if(isServiceEnabled())
             {
-                CallStateListener.getCallStateListenerObject().unregisterCallStateListener();
+
             }
             else
             {
-                CallStateListener.getCallStateListenerObject().registerCallStateListener();
+
             }
         }
     }

@@ -57,14 +57,6 @@ public class BluetoothController {
         return bluetoothAdapter.isEnabled();
     }
 
-    public void connectToHeadset() {
-        //AudioManager audioManager = AppContext.getAppContext().getSystemService(Context.AUDIO_SERVICE);
-        //audioManager.setBluetoothScoOn();
-
-
-        LogUtil.print("connecting to headset");
-    }
-
     Set<BluetoothDevice> pairedDevices;
     public void getPairedDevices()
     {
@@ -98,7 +90,7 @@ public class BluetoothController {
         };
         // Register the BroadcastReceiver
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        AppContext.getAppContext().registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+
 
 
         return deviceList;
@@ -126,7 +118,7 @@ public class BluetoothController {
         // Register the BroadcastReceiver
         LogUtil.print("discover called");
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        AppContext.getAppContext().registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+
 
         //return deviceList;
     }
@@ -137,29 +129,5 @@ public class BluetoothController {
     public void cancelDiscovery()
     {
         mBluetoothAdapter.cancelDiscovery();
-    }
-
-    public void unRegisterReceiver()
-    {
-        AppContext.getAppContext().unregisterReceiver(mReceiver);
-    }
-
-    /*
-    public ArrayAdapter<String> getDeviceNames()
-    {
-        ArrayAdapter<String> names = new ArrayAdapter<String>();
-        int listCount = deviceList.getCount();
-        for(int i=0; i <= listCount; i++)
-        {
-            BluetoothDevice device = deviceList.getItem(i);
-            names.add(device.getName() + "\n" + device.getAddress());
-        }
-        return names;
-    }
-    */
-
-    public void pairIfNotPaired(BluetoothDevice device)
-    {
-        //mBluetoothAdapter.
     }
 }
