@@ -25,6 +25,7 @@ public class ConstantUtil {
 
     public static final String CALL_STATE_PREF = "CALL_STATE_PREF";
     public static final String CALL_STATE_STRING = "CALL_STATE_STRING";
+    public static final String CALL_STATE_OUTGOING_STARTED = "CALL_STATE_OUTGOING_STARTED";
     public static final String CALL_STATE_CONNECTED = "ACTION_CALL_CONNECTED";
     public static final String CALL_STATE_DISCONNECTED = "CALL_STATE_DISCONNECTED";
     public static final String CALL_STATE_NONE = "CALL_STATE_NONE";

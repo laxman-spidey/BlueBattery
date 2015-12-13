@@ -21,6 +21,7 @@ public class CallStateReciever extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
+
         if (AppServiceStateUtil.getServiceState(context) == true)
         {
             String broadcastAction = intent.getAction();
