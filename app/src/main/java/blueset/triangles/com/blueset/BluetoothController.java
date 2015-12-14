@@ -51,7 +51,7 @@ public class BluetoothController {
         return true;
     }
 
-    public boolean isEnabled()
+    public static boolean isEnabled()
     {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return bluetoothAdapter.isEnabled();

@@ -35,4 +35,11 @@ public class ConstantUtil {
 
     //App Service Constants
     public static final String APP_SERVICE_STATE = "APP_SERVICE_STATE";
+
+    //Bluetooth
+    public static final String BLUETOOTH_STATE_PREF = "BLUETOOTH_STATE_PREF";
+    public static final String BLUETOOTH_STATE_PRIOR_TO_MUSIC_PREF = "BLUETOOTH_STATE_PRIOR_TO_MUSIC_PREF";
+
 }
+
+

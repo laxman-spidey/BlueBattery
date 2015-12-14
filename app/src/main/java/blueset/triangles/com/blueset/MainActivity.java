@@ -1,10 +1,14 @@
 package blueset.triangles.com.blueset;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,6 +32,7 @@ public class MainActivity extends ActionBarActivity  implements View.OnClickList
     public static final String PREFS_NAME = "BlueSetPreferences";
     public static final String SELECTED_DEVICE = "seletedDevice";
 
+    private final int PHONE_STATE_REQUEST_CODE = 01;
     private Button settingsButton;
     private ImageButton bluetoothButton;
     @Override
@@ -38,6 +43,43 @@ public class MainActivity extends ActionBarActivity  implements View.OnClickList
         initiate();
         setupUICOmponents();
         afterActivityCreation();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        requestForPermission();
+    }
+
+    protected void requestForPermission()
+    {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        PHONE_STATE_REQUEST_CODE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 
     private void setupUICOmponents() {

@@ -13,9 +13,11 @@ import java.lang.reflect.Constructor;
 
 import blueset.triangles.com.blueset.util.ConstantUtil;
 import blueset.triangles.com.blueset.util.LogUtil;
+import blueset.triangles.com.blueset.util.SharedPrefUtil;
 
 public class MusicStateChangeService extends IntentService {
 
+    SharedPrefUtil sharedPrefUtil;
     public MusicStateChangeService() {
         super(ConstantUtil.MUSIC_STATE);
     }
@@ -23,6 +25,7 @@ public class MusicStateChangeService extends IntentService {
     @Override
     protected void onHandleIntent(final Intent intent) {
         LogUtil.print("service started");
+        sharedPrefUtil = new SharedPrefUtil(getApplicationContext());
         if (intent != null) {
             if (intent.hasExtra(ConstantUtil.MUSIC_STATE)) {
                 String previousState = ConstantUtil.CALL_STATE_NONE;
@@ -49,9 +52,9 @@ public class MusicStateChangeService extends IntentService {
                             e.printStackTrace();
                         }
                     }
-                    if (getCallStateFromSharedPref().equals(ConstantUtil.CALL_STATE_CONNECTED))
+                    if (sharedPrefUtil.getCallStateFromSharedPref().equals(ConstantUtil.CALL_STATE_CONNECTED))
                     {
-                        setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
+                        sharedPrefUtil.setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
                     }
                     else
                     {
@@ -62,31 +65,17 @@ public class MusicStateChangeService extends IntentService {
         }
     }
 
-    protected void setMusicState(String state) {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(ConstantUtil.MUSIC_STATE_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(ConstantUtil.MUSIC_STATE, state);
-        editor.commit();
-    }
 
     protected void handleMusicIntent(Intent intent) {
         LogUtil.print("handling intent");
         if (intent.getBooleanExtra(ConstantUtil.INTENT_ACTION_PLAYING, false)) {
-            setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
+            sharedPrefUtil.setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
             sendBluetoothAction(true);
         } else {
-            setMusicState(ConstantUtil.MUSIC_STATE_STOP);
-            sendBluetoothAction(false);
+            sharedPrefUtil.setMusicState(ConstantUtil.MUSIC_STATE_STOP);
+            //sendBluetoothAction(false);
         }
 
-
-    }
-
-    private String getCallStateFromSharedPref() {
-        SharedPreferences sharedPref1 = getApplicationContext().getSharedPreferences(ConstantUtil.CALL_STATE_PREF, Context.MODE_PRIVATE);
-        String state = sharedPref1.getString(ConstantUtil.CALL_STATE_STRING, ConstantUtil.CALL_STATE_NONE);
-        LogUtil.print("Call_state" + state);
-        return state;
 
     }
     private void sendBluetoothAction(boolean bluetoothState)
