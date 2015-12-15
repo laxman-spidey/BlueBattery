@@ -21,7 +21,7 @@ public class CallStateHandlerService extends IntentService {
 
     SharedPrefUtil sharedPrefUtil;
     public CallStateHandlerService() {
-        super("CALL_STATE_HANDLER");
+        super(ConstantUtil.CUSTOM_ACTION_CALL_STATE);
     }
     public CallStateHandlerService(String name) {
         super(name);
@@ -30,7 +30,6 @@ public class CallStateHandlerService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         LogUtil.print("service started");
         sharedPrefUtil = new SharedPrefUtil(getApplicationContext());
-        sharedPrefUtil.setBluetoothState(BluetoothController.isEnabled());
         String broadcastCallState = intent.getStringExtra("ACTION_CALL_STATE");
         if(broadcastCallState.equals(ACTION_OUTGOING_CALL))
         {
@@ -49,12 +48,16 @@ public class CallStateHandlerService extends IntentService {
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_IDLE))
             {
+                boolean previousState1 = sharedPrefUtil.getBluetoothState();
                 sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_DISCONNECTED);
                 LogUtil.print("call disconnected");
                 String musicState = sharedPrefUtil.getMusicStateFromSharedPref();
-                boolean previousState = sharedPrefUtil.getBluetoothState();
-                if((musicState.equals(ConstantUtil.MUSIC_STATE_STOP) || musicState.equals(ConstantUtil.MUSIC_STATE_NONE))
-                        && previousState == false) {
+                if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_ON_MANUALLY))
+                {
+                    LogUtil.print("bluetooth turned on manually. So, keeping it turned on");
+                    return;
+                }
+                if((musicState.equals(ConstantUtil.MUSIC_STATE_STOP) || musicState.equals(ConstantUtil.MUSIC_STATE_NONE))) {
                     sendBluetoothAction(false);
                 }
             }

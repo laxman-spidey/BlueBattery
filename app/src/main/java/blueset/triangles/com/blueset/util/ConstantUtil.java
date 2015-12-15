@@ -38,7 +38,11 @@ public class ConstantUtil {
 
     //Bluetooth
     public static final String BLUETOOTH_STATE_PREF = "BLUETOOTH_STATE_PREF";
-    public static final String BLUETOOTH_STATE_PRIOR_TO_MUSIC_PREF = "BLUETOOTH_STATE_PRIOR_TO_MUSIC_PREF";
+    public static final String BLUEOOTH_SESSION = "BLUETOOTH_SESSION";
+    public static final String BLUEOOTH_SESSION_ON_MANUALLY = "BLUEOOTH_SESSION_ON_MANUALLY";
+    public static final String BLUEOOTH_SESSION_ON_AUTO = "BLUEOOTH_SESSION_ON_AUTO";
+    public static final String BLUEOOTH_SESSION_OFF = "BLUEOOTH_SESSION_OFF";
+    public static final String BLUETOOTH_STATE_CHANGE_ACTION = "android.bluetooth.adapter.action.STATE_CHANGED";
 
 }
 

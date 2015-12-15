@@ -46,14 +46,30 @@ public class SharedPrefUtil
     {
         SharedPreferences sharedPref1 = context.getApplicationContext().getSharedPreferences(ConstantUtil.BLUE_SHARED_PREF, Context.MODE_PRIVATE);
         boolean state = sharedPref1.getBoolean(ConstantUtil.BLUETOOTH_STATE_PREF, false);
+        LogUtil.print("bluetooth previous state  = " + state);
         return state;
     }
     public void setBluetoothState(boolean state)
     {
         SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences(ConstantUtil.BLUE_SHARED_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        LogUtil.print("setting previous state "+state);
         editor.putBoolean(ConstantUtil.BLUETOOTH_STATE_PREF, state);
+        editor.commit();
     }
-
-
+    public String getBluetoothSessionState()
+    {
+        SharedPreferences sharedPref1 = context.getApplicationContext().getSharedPreferences(ConstantUtil.BLUE_SHARED_PREF, Context.MODE_PRIVATE);
+        String state = sharedPref1.getString(ConstantUtil.BLUEOOTH_SESSION, ConstantUtil.BLUEOOTH_SESSION_OFF);
+        LogUtil.print("bluetooth session state  = "+state);
+        return state;
+    }
+    public void setBluetoothSessionState(String state)
+    {
+        SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences(ConstantUtil.BLUE_SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        LogUtil.print("setting bluetooth session state "+state);
+        editor.putString(ConstantUtil.BLUEOOTH_SESSION, state);
+        editor.commit();
+    }
 }

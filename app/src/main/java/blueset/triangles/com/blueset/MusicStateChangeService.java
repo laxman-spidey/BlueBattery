@@ -26,6 +26,7 @@ public class MusicStateChangeService extends IntentService {
     protected void onHandleIntent(final Intent intent) {
         LogUtil.print("service started");
         sharedPrefUtil = new SharedPrefUtil(getApplicationContext());
+        sharedPrefUtil.setBluetoothState(BluetoothController.isEnabled());
         if (intent != null) {
             if (intent.hasExtra(ConstantUtil.MUSIC_STATE)) {
                 String previousState = ConstantUtil.CALL_STATE_NONE;
@@ -70,14 +71,23 @@ public class MusicStateChangeService extends IntentService {
         LogUtil.print("handling intent");
         if (intent.getBooleanExtra(ConstantUtil.INTENT_ACTION_PLAYING, false)) {
             sharedPrefUtil.setMusicState(ConstantUtil.MUSIC_STATE_PLAY);
+            if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_OFF))
+            {
+                sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
+            }
             sendBluetoothAction(true);
         } else {
             sharedPrefUtil.setMusicState(ConstantUtil.MUSIC_STATE_STOP);
-            //sendBluetoothAction(false);
+            if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_ON_MANUALLY))
+            {
+                return;
+            }
+            sendBluetoothAction(false);
         }
 
 
     }
+
     private void sendBluetoothAction(boolean bluetoothState)
     {
         LogUtil.print("turning bluetooth " + bluetoothState);
