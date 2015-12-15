@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/first_things_first_view"
+             android:background="@color/material_green_700"
+             tools:context="blueset.triangles.com.blueset.WelcomePermissionScreen">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView android:id="@+id/fullscreen_content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:keepScreenOn="true"
+              android:textColor="@color/material_green_300"
+              android:textSize="50sp"
+              android:fontFamily="sans-serif-thin"
+              android:gravity="left|top"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:text="@string/first_things_first"/>
+
+    <ImageButton
+        android:layout_width="134dp"
+        android:layout_height="190dp"
+        android:id="@+id/security_button"
+        android:layout_gravity="center"
+        android:background="@drawable/security_icon"/>
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+
+                 >
+
+        <LinearLayout android:id="@+id/fullscreen_content_controls"
+                      style="?metaButtonBarStyle"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="bottom|center_horizontal"
+                      android:background="@color/material_green_300"
+                      android:orientation="horizontal"
+                      android:paddingTop="1dp"
+                      tools:ignore="UselessParent">
+
+            <Button android:id="@+id/dummy_button"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_weight="1.5"
+
+                    android:background="@color/material_green_900"
+                    android:text="@string/done_button"
+                    android:textSize="17sp"/>
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</FrameLayout>

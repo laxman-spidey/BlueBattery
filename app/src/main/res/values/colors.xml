@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="material_green_100">#c8e6c9</color>
+    <color name="material_green_200">#a5d6a7</color>
+    <color name="material_green_300">#81c784</color>
+    <color name="material_green_400">#66bb6a</color>
     <color name="material_green_500">#0a8f08</color>
     <color name="material_green_700">#056f00</color>
+    <color name="material_green_900">#1b5e20</color>
     <color name="material_grey_500">#9E9E9E</color>
     <color name="background_material_dark">#ffffff</color>
     <color name="accent_material_dark">#80cbc4</color>

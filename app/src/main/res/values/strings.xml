@@ -11,7 +11,9 @@
     <string name="add_widget">Add widget</string>
 
     <string name="title_activity_welcome">WelcomeActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="done_button">DONE</string>
+    <string name="first_things_first">First Things First</string>
+
+    <string name="title_activity_welcome_permission_screen">WelcomePermissionScreen</string>
 
 </resources>

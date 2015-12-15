@@ -1,11 +1,15 @@
 package blueset.triangles.com.blueset;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -44,6 +48,13 @@ public class WelcomeActivity extends Activity
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
+        mContentView = findViewById(R.id.imageView);
+        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
     }
 
@@ -91,7 +102,14 @@ public class WelcomeActivity extends Activity
     public void showMainActivity ()
     {
         Intent intent = new Intent();
-        intent.setClass(this,blueset.triangles.com.blueset.MainActivity.class);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+        {
+            intent.setClass(this, blueset.triangles.com.blueset.WelcomePermissionScreen.class);
+        }
+        else
+        {
+            intent.setClass(this,blueset.triangles.com.blueset.MainActivity.class);
+        }
         startActivity(intent);
     }
 
