@@ -44,6 +44,10 @@ public class CallStateHandlerService extends IntentService {
             {
                 sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_CONNECTED);
                 LogUtil.print("Incoming call");
+                if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_OFF))
+                {
+                    sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
+                }
                 sendBluetoothAction(true);
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_IDLE))
@@ -66,6 +70,10 @@ public class CallStateHandlerService extends IntentService {
                 {
                     LogUtil.print("ne mokam.. raavey");
                     sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_CONNECTED);
+                    if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_OFF))
+                    {
+                        sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
+                    }
                     sendBluetoothAction(true);
                 }
                 LogUtil.print("others");

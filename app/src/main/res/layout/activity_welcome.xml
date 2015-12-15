@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/material_green_500"
+             tools:context="blueset.triangles.com.blueset.WelcomeActivity">
+
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fitsSystemWindows="true">
+
+        <ImageView
+            android:layout_width="103dp"
+            android:layout_height="140dp"
+            android:id="@+id/imageView"
+            android:background="@drawable/my_logo"
+            android:layout_gravity="center"
+            android:contentDescription="Logo"/>
+    </FrameLayout>
+
+</FrameLayout>
