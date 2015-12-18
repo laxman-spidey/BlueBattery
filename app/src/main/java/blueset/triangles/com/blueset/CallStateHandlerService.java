@@ -44,15 +44,16 @@ public class CallStateHandlerService extends IntentService {
             {
                 sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_CONNECTED);
                 LogUtil.print("Incoming call");
-                if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_OFF))
+                if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_ON_MANUALLY))
                 {
-                    sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
+                    LogUtil.print("bluetooth turned on manually. So, keeping it turned on");
+                    return;
                 }
+                sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
                 sendBluetoothAction(true);
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_IDLE))
             {
-                boolean previousState1 = sharedPrefUtil.getBluetoothState();
                 sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_DISCONNECTED);
                 LogUtil.print("call disconnected");
                 String musicState = sharedPrefUtil.getMusicStateFromSharedPref();
@@ -61,19 +62,25 @@ public class CallStateHandlerService extends IntentService {
                     LogUtil.print("bluetooth turned on manually. So, keeping it turned on");
                     return;
                 }
-                if((musicState.equals(ConstantUtil.MUSIC_STATE_STOP) || musicState.equals(ConstantUtil.MUSIC_STATE_NONE))) {
-                    sendBluetoothAction(false);
+                if (musicState.equals(ConstantUtil.MUSIC_STATE_PLAY))
+                {
+                    LogUtil.print("Music is already on. So, keeping it turned on");
+                    return;
                 }
+                LogUtil.print("call session ended turning bluetooth off");
+                sendBluetoothAction(false);
+
             }
             else if(callState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
                 if(sharedPrefUtil.getCallStateFromSharedPref().equals(ConstantUtil.CALL_STATE_OUTGOING_STARTED))
                 {
-                    LogUtil.print("ne mokam.. raavey");
                     sharedPrefUtil.setCallState(ConstantUtil.CALL_STATE_CONNECTED);
-                    if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_OFF))
+                    if(sharedPrefUtil.getBluetoothSessionState().equals(ConstantUtil.BLUEOOTH_SESSION_ON_MANUALLY))
                     {
-                        sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
+                        LogUtil.print("bluetooth turned on manually. So, keeping it turned on");
+                        return;
                     }
+                    sharedPrefUtil.setBluetoothSessionState(ConstantUtil.BLUEOOTH_SESSION_ON_AUTO);
                     sendBluetoothAction(true);
                 }
                 LogUtil.print("others");

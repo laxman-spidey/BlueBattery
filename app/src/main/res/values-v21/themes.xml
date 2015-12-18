@@ -7,6 +7,8 @@
                 <item name="android:colorBackground">@color/material_grey_500</item>
                 <item name="android:windowBackground">@color/material_grey_500</item>
                 <item name="android:statusBarColor">@color/material_green_700</item>
+                <item name="android:windowContentTransitions">true</item>
+                <!-- specify enter and exit transitions -->
 
         </style>
 </resources>

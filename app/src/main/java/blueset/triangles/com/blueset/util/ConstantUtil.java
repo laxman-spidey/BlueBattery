@@ -44,6 +44,9 @@ public class ConstantUtil {
     public static final String BLUEOOTH_SESSION_OFF = "BLUEOOTH_SESSION_OFF";
     public static final String BLUETOOTH_STATE_CHANGE_ACTION = "android.bluetooth.adapter.action.STATE_CHANGED";
 
+    //first time user constant
+    public static final String FIRST_TIME_USE_PREF = "FIRST_TIME_USE_PREF";
+
 }
 
 

@@ -14,6 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
+import blueset.triangles.com.blueset.util.AppServiceStateUtil;
+import blueset.triangles.com.blueset.util.ConstantUtil;
+import blueset.triangles.com.blueset.util.SharedPrefUtil;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -98,9 +102,11 @@ public class WelcomeActivity extends Activity
             }
         };
         splashThread.start();
+        processFirstTimeUsage();
     }
     public void showMainActivity ()
     {
+
         Intent intent = new Intent();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
         {
@@ -113,5 +119,13 @@ public class WelcomeActivity extends Activity
         startActivity(intent);
     }
 
-
+    private void processFirstTimeUsage()
+    {
+        SharedPrefUtil sharedPrefUtil = new SharedPrefUtil(getApplicationContext());
+        if(sharedPrefUtil.getFirstTimeUse())
+        {
+            AppServiceStateUtil.setServiceState(getApplicationContext(), true);
+            sharedPrefUtil.setFirstTimeUse(false);
+        }
+    }
 }

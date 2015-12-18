@@ -26,7 +26,7 @@ public class MusicStateChangeService extends IntentService {
     protected void onHandleIntent(final Intent intent) {
         LogUtil.print("service started");
         sharedPrefUtil = new SharedPrefUtil(getApplicationContext());
-        sharedPrefUtil.setBluetoothState(BluetoothController.isEnabled());
+        //sharedPrefUtil.setBluetoothState(BluetoothController.isEnabled());
         if (intent != null) {
             if (intent.hasExtra(ConstantUtil.MUSIC_STATE)) {
                 String previousState = ConstantUtil.CALL_STATE_NONE;
